@@ -44,10 +44,11 @@ nav {
 
 /* --- DASHBOARD --- */
 .dashboard-container {
-    display: grid;
-    grid-template-columns: 1fr 350px;
-    padding: 50px 5%;
-    gap: 50px;
+    display: flex;
+    flex-direction: row;
+    padding: 0 5% 60px 5%;
+    gap: 40px;
+    align-items: flex-start;
 }
 
 h1 {
@@ -61,8 +62,18 @@ h1 {
     margin-bottom: 10px;
 }
 
-.movie-grid { display: flex; gap: 20px; margin-top: 40px; }
-.movie-card { background: #111; padding: 15px; width: 210px; border: 1px solid #1a1a1a; }
+.movie-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 25px;
+    flex: 1; /* This tells the movies to take up the remaining space */
+}
+.movie-card { 
+    background: #111; 
+    padding: 15px; 
+    width: 100%; /* Change from 210px to 100% */
+    border: 1px solid #1a1a1a; 
+}
 .poster-placeholder { height: 300px; background: #151515; display: flex; align-items: center; justify-content: center; font-size: 30px; margin-bottom: 15px; color: #222; font-family: 'Bebas Neue'; }
 .movie-title { font-family: 'Bebas Neue', sans-serif; font-size: 20px; color: #fff; margin-bottom: 15px; }
 
