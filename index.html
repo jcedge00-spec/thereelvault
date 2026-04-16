@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>THE REEL | DASHBOARD</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;600;800&display=swap');
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --gold: #c5a059;
+            --gold-dim: #8e7340;
+            --bg-black: #0a0a0a;
+            --scanline: rgba(255, 255, 255, 0.03);
+        }
+
+        body {
+            background-color: var(--bg-black);
+            color: #ffffff;
+            font-family: 'Montserrat', sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+            zoom: 0.8;
+            position: relative;
+            animation: vaultFadeIn 0.6s ease-out forwards;
+            opacity: 0;
+        }
+
+        @keyframes vaultFadeIn {
+            0% { opacity: 0; transform: translateY(15px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        body.fade-out {
+            opacity: 0 !important;
+            transform: translateY(-15px);
+            transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+        }
+
+        /* CRT Scanline Effect */
+        body::before {
+            content: " ";
+            display: block;
+            position: fixed;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(var(--scanline) 50%, transparent 50%);
+            background-size: 100% 4px;
+            z-index: 100;
+            pointer-events: none;
+            opacity: 0.5;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 30px 5%;
+            background: #0d0d0d;
+            border-bottom: 2px solid rgba(197, 160, 89, 0.3);
+            position: relative;
+            z-index: 101;
+        }
+
+        .brand-logo { text-decoration: none; }
+        .brand-logo .moly { display: block; color: var(--gold-dim); font-size: 10px; letter-spacing: 3px; font-weight: 800; }
+        .brand-logo .vault-text { font-family: 'Bebas Neue', sans-serif; font-size: 32px; letter-spacing: 4px; color: #fff; }
+
+        .nav-links a {
+            color: #bbb !important;
+            text-decoration: none !important;
+            text-transform: uppercase;
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            margin-left: 30px;
+        }
+
+        .nav-links a:hover { color: var(--gold) !important; }
+
+        .dashboard-container {
+            display: grid;
+            grid-template-columns: 1fr 380px;
+            padding: 60px 5%;
+            gap: 50px;
+            position: relative;
+            z-index: 101;
+        }
+
+        .bracket-header {
+            position: relative;
+            padding-left: 25px;
+            border-left: 3px solid var(--gold-dim);
+        }
+
+        h1 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 130px;
+            line-height: 0.85;
+            letter-spacing: 12px;
+            background: linear-gradient(to bottom, #ffffff 40%, var(--gold-dim) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 15px;
+            font-weight: 800;
+        }
+
+        .sub-header {
+            font-size: 14px;
+            letter-spacing: 8px;
+            color: var(--gold);
+            text-transform: uppercase;
+            font-weight: 800;
+        }
+
+        .movie-grid { 
+            display: flex; 
+            flex-wrap: wrap; 
+            gap: 30px; 
+            margin-top: 60px; 
+        }
+        
+        .movie-card { 
+            background: #111; 
+            padding: 20px; 
+            width: 260px;
+            border: 2px solid #1a1a1a;
+            position: relative;
+            overflow: hidden; 
+        }
+
+        .poster-container { 
+            height: 340px; 
+            background: #080808; 
+            margin-bottom: 20px; 
+            border: 1px solid #151515;
+            overflow: hidden;
+        }
+
+        .poster-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .movie-title { 
+            font-family: 'Bebas Neue', sans-serif; 
+            font-size: 24px; 
+            color: #fff; 
+            margin-bottom: 20px; 
+            letter-spacing: 3px;
+        }
+
+        .specs-overlay {
+            position: absolute;
+            top: 100%; 
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(8, 8, 8, 0.98);
+            padding: 25px;
+            transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 5;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .movie-card.active .specs-overlay { top: 0; }
+
+        .specs-title { font-family: 'Bebas Neue'; color: var(--gold); font-size: 22px; margin-bottom: 12px; font-weight: 800; }
+        .specs-text { font-size: 13px; color: #eee; line-height: 1.6; margin-bottom: 20px; }
+        .specs-list { font-size: 11px; color: var(--gold-dim); list-style: none; text-transform: uppercase; letter-spacing: 2px; font-weight: 600; }
+        .specs-list li { margin-bottom: 8px; border-bottom: 1px solid #222; padding-bottom: 4px; }
+
+        .details-btn {
+            display: block;
+            border: 2px solid #333;
+            color: #999; 
+            padding: 15px 0;
+            text-align: center;
+            font-size: 12px; 
+            font-weight: 800;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            cursor: pointer;
+            z-index: 10;
+            position: relative;
+            transition: 0.3s;
+        }
+
+        .details-btn.confirm-state { border-color: var(--gold); color: var(--gold); }
+        .details-btn.reserved-state { background: var(--gold); color: #000; border-color: var(--gold); pointer-events: none; }
+        .details-btn:hover { border-color: #eee; color: #fff; }
+
+        .side-panel { 
+            background: #0d0d0d; 
+            border: 2px solid #1a1a1a;
+            padding: 45px;
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+            height: fit-content;
+            position: relative;
+        }
+
+        .side-panel::after {
+            content: "";
+            position: absolute;
+            top: -2px; right: -2px;
+            width: 50px; height: 50px;
+            border-top: 3px solid var(--gold);
+            border-right: 3px solid var(--gold);
+        }
+
+        .side-label { font-size: 11px; letter-spacing: 4px; color: #555; text-transform: uppercase; font-weight: 800; }
+        .side-value { font-family: 'Bebas Neue', sans-serif; font-size: 32px; color: #fff; margin-top: 8px; letter-spacing: 3px; }
+
+        .status-dot {
+            height: 10px; width: 10px;
+            background-color: var(--gold);
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 15px;
+            box-shadow: 0 0 15px var(--gold);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(197, 160, 89, 0.7); }
+            70% { transform: scale(1.1); box-shadow: 0 0 0 15px rgba(197, 160, 89, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(197, 160, 89, 0); }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <a href="index.html" class="brand-logo">
+            <span class="moly">MEMBERS ONLY</span>
+            <span class="vault-text">THE REEL VAULT</span>
+        </a>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="about.html">About</a>
+            <a href="apply.html">Apply</a>
+            <a href="contact.html">Contact</a>
+            <a href="login.html">Exit</a>
+        </div>
+    </nav>
+
+    <div class="dashboard-container">
+        <main>
+            <div class="bracket-header">
+                <span class="sub-header">System Authorization: Verified</span>
+                <h1>ACCESS GRANTED</h1>
+            </div>
+
+            <div class="movie-grid">
+                <div class="movie-card">
+                    <div class="specs-overlay">
+                        <p class="specs-title">DATA PACKET: M-01</p>
+                        <p class="specs-text">Explorers travel through a wormhole to ensure humanity's survival.</p>
+                        <ul class="specs-list">
+                            <li>Format: 70MM IMAX</li>
+                            <li>Audio: Atmos 12.1</li>
+                        </ul>
+                    </div>
+                    <div class="poster-container">
+                        <img src="./interstellar.jpg" alt="Interstellar">
+                    </div>
+                    <p class="movie-title">INTERSTELLAR</p>
+                    <div class="details-btn" onclick="handleReservation(this)">Reserve Seat</div>
+                </div>
+
+                <div class="movie-card">
+                    <div class="specs-overlay">
+                        <p class="specs-title">DATA PACKET: M-02</p>
+                        <p class="specs-text">A hacker learns about the true nature of his reality.</p>
+                        <ul class="specs-list">
+                            <li>Format: 4K Digital</li>
+                            <li>Audio: THX Cert</li>
+                        </ul>
+                    </div>
+                    <div class="poster-container">
+                        <img src="./matrix.jpg" alt="The Matrix">
+                    </div>
+                    <p class="movie-title">THE MATRIX</p>
+                    <div class="details-btn" onclick="handleReservation(this)">Reserve Seat</div>
+                </div>
+
+                <div class="movie-card">
+                    <div class="specs-overlay">
+                        <p class="specs-title">DATA PACKET: M-03</p>
+                        <p class="specs-text">A thief steals secrets through dream-sharing technology.</p>
+                        <ul class="specs-list">
+                            <li>Format: 35MM Print</li>
+                            <li>Audio: DTS-HD</li>
+                        </ul>
+                    </div>
+                    <div class="poster-container">
+                        <img src="./inception.jpg" alt="Inception">
+                    </div>
+                    <p class="movie-title">INCEPTION</p>
+                    <div class="details-btn" onclick="handleReservation(this)">Reserve Seat</div>
+                </div>
+
+                <div class="movie-card">
+                    <div class="specs-overlay">
+                        <p class="specs-title">DATA PACKET: M-04</p>
+                        <p class="specs-text">When the menace known as the Joker wreaks havoc on Gotham.</p>
+                        <ul class="specs-list">
+                            <li>Format: 70MM IMAX</li>
+                            <li>Audio: SDDS</li>
+                            <li>Runtime: 152 MIN</li>
+                        </ul>
+                    </div>
+                    <div class="poster-container">
+                        <img src="./dark-knight.jpg" alt="The Dark Knight">
+                    </div>
+                    <p class="movie-title">THE DARK KNIGHT</p>
+                    <div class="details-btn" onclick="handleReservation(this)">Reserve Seat</div>
+                </div>
+            </div>
+        </main>
+
+        <aside class="side-panel">
+            <div>
+                <p class="side-label">Club Status</p>
+                <p class="side-value"><span class="status-dot"></span>AUTHENTICATED</p>
+            </div>
+            <div>
+                <p class="side-label">Current Location</p>
+                <p class="side-value">ADDIS ABABA VAULT</p>
+            </div>
+            <div>
+                <p class="side-label">System Uptime</p>
+                <p class="side-value">24:00:00</p>
+            </div>
+        </aside>
+    </div>
+
+    <script>
+        function handleReservation(btn) {
+            const card = btn.parentElement;
+            if (!card.classList.contains('active')) {
+                card.classList.add('active');
+                btn.innerText = "CONFIRM";
+                btn.classList.add('confirm-state');
+            } else if (btn.innerText === "CONFIRM") {
+                btn.innerText = "RESERVED";
+                btn.classList.remove('confirm-state');
+                btn.classList.add('reserved-state');
+            }
+        }
+
+        // Smooth Page Transition Logic
+        document.addEventListener('DOMContentLoaded', () => {
+            const links = document.querySelectorAll('a');
+            links.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    if (this.hostname === window.location.hostname && !this.href.includes('#')) {
+                        e.preventDefault();
+                        const destination = this.href;
+                        document.body.classList.add('fade-out');
+                        setTimeout(() => { window.location.href = destination; }, 400);
+                    }
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>

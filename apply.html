@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>THE REEL | APPLY</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;600;800&display=swap');
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        :root { --gold: #c5a059; --gold-dim: #8e7340; --bg-black: #0a0a0a; }
+
+        body {
+            background-color: var(--bg-black);
+            color: #ffffff;
+            font-family: 'Montserrat', sans-serif;
+            min-height: 100vh;
+            zoom: 0.8;
+            animation: vaultFadeIn 0.6s ease-out forwards;
+            opacity: 0;
+        }
+
+        @keyframes vaultFadeIn {
+            0% { opacity: 0; transform: translateY(15px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        body.fade-out {
+            opacity: 0 !important;
+            transform: translateY(-15px);
+            transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 30px 5%;
+            background: #0d0d0d;
+            border-bottom: 2px solid rgba(197, 160, 89, 0.3);
+        }
+
+        .brand-logo { text-decoration: none; }
+        .brand-logo .moly { display: block; color: var(--gold-dim); font-size: 10px; letter-spacing: 3px; font-weight: 800; }
+        .brand-logo .vault-text { font-family: 'Bebas Neue', sans-serif; font-size: 32px; letter-spacing: 4px; color: #fff; }
+
+        .nav-links a {
+            color: #bbb !important;
+            text-decoration: none !important;
+            text-transform: uppercase;
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            margin-left: 30px;
+        }
+
+        .apply-wrapper { display: flex; justify-content: center; padding: 80px 5%; }
+
+        .apply-card {
+            background: #0d0d0d;
+            border-left: 4px solid var(--gold);
+            padding: 60px;
+            width: 100%;
+            max-width: 700px;
+            box-shadow: 20px 20px 60px rgba(0,0,0,0.8);
+            position: relative;
+        }
+
+        .apply-title { font-family: 'Bebas Neue'; font-size: 64px; letter-spacing: 6px; color: #fff; margin-bottom: 50px; font-weight: 800; }
+
+        .form-group { margin-bottom: 35px; }
+        label { display: block; font-size: 12px; letter-spacing: 3px; color: #888; margin-bottom: 12px; text-transform: uppercase; font-weight: 800; }
+        input { 
+            width: 100%; 
+            background: #111; 
+            border: 2px solid #222; 
+            padding: 20px; 
+            color: var(--gold); 
+            outline: none; 
+            font-family: 'Montserrat';
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .submit-btn {
+            width: 100%;
+            background: transparent;
+            border: 2px solid var(--gold);
+            color: var(--gold);
+            padding: 22px;
+            cursor: pointer;
+            font-family: 'Bebas Neue';
+            letter-spacing: 5px;
+            font-size: 20px;
+            font-weight: 800;
+            transition: 0.4s;
+            text-transform: uppercase;
+        }
+
+        .submit-btn:hover { background: var(--gold); color: #000; }
+
+        /* --- SUCCESS STATE --- */
+        #success-message {
+            display: none;
+            text-align: center;
+            animation: vaultFadeIn 0.5s ease-out forwards;
+        }
+
+        .success-title { font-family: 'Bebas Neue'; font-size: 80px; color: var(--gold); letter-spacing: 10px; }
+        .success-sub { font-size: 14px; letter-spacing: 5px; color: #888; margin-top: 10px; font-weight: 800; }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="index.html" class="brand-logo">
+            <span class="moly">MEMBERS ONLY</span>
+            <span class="vault-text">THE REEL VAULT</span>
+        </a>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="about.html">About</a>
+            <a href="apply.html">Apply</a>
+            <a href="contact.html">Contact</a>
+            <a href="login.html">Exit</a>
+        </div>
+    </nav>
+
+    <div class="apply-wrapper">
+        <div class="apply-card">
+            <div id="apply-form-content">
+                <h1 class="apply-title">REQUEST ACCESS</h1>
+                <form id="vault-apply-form">
+                    <div class="form-group"><label>Full Name</label><input type="text" required placeholder="ENTER LEGAL NAME"></div>
+                    <div class="form-group"><label>Email Address</label><input type="email" required placeholder="SECURE EMAIL"></div>
+                    <div class="form-group"><label>Invitation Code</label><input type="text" required placeholder="VAULT-XXXX-XXXX"></div>
+                    <button type="submit" class="submit-btn" id="submit-btn">Submit Credentials</button>
+                </form>
+            </div>
+
+            <div id="success-message">
+                <h1 class="success-title">YOU'RE IN.</h1>
+                <p class="success-sub">AUTHENTICATION COMPLETE // CHECK YOUR EMAIL</p>
+                <a href="index.html" class="submit-btn" style="display:inline-block; margin-top:40px; text-decoration:none; width:auto; padding: 15px 40px;">Return Home</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Form Handling
+        const form = document.getElementById('vault-apply-form');
+        const content = document.getElementById('apply-form-content');
+        const success = document.getElementById('success-message');
+        const btn = document.getElementById('submit-btn');
+
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            btn.innerText = "TRANSMITTING...";
+            
+            setTimeout(() => {
+                content.style.display = 'none';
+                success.style.display = 'block';
+            }, 1500);
+        });
+
+        // Page Transitions
+        document.addEventListener('DOMContentLoaded', () => {
+            const links = document.querySelectorAll('a');
+            links.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    if (this.hostname === window.location.hostname && !this.href.includes('#')) {
+                        e.preventDefault();
+                        const destination = this.href;
+                        document.body.classList.add('fade-out');
+                        setTimeout(() => { window.location.href = destination; }, 400);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

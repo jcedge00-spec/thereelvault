@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>THE REEL | SECURE GATEWAY</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;600;800&display=swap');
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --gold: #c5a059;
+            --gold-dim: #8e7340;
+            --bg-black: #0a0a0a;
+            --error: #ff4444;
+        }
+
+        body {
+            background-color: var(--bg-black);
+            color: #ffffff;
+            font-family: 'Montserrat', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* --- DECORATIVE BACKGROUND PARTICLES --- */
+        body::before {
+            content: "SECURE CONNECTION // AUTHENTICATING... // PORT 8080 //";
+            position: absolute;
+            font-size: 150px;
+            font-family: 'Bebas Neue';
+            color: rgba(197, 160, 89, 0.03);
+            white-space: nowrap;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-15deg);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* --- LOGIN CONTAINER --- */
+        .login-box {
+            position: relative;
+            z-index: 10;
+            background: #0d0d0d;
+            border: 2px solid #1a1a1a;
+            padding: 70px;
+            width: 480px; /* Slightly wider */
+            border-top: 6px solid var(--gold);
+            box-shadow: 0 50px 100px rgba(0,0,0,0.9);
+            text-align: center;
+            transition: transform 0.1s;
+        }
+
+        /* Corner Brackets Decoration */
+        .login-box::after {
+            content: "";
+            position: absolute;
+            bottom: -15px;
+            right: -15px;
+            width: 40px;
+            height: 40px;
+            border-bottom: 3px solid var(--gold);
+            border-right: 3px solid var(--gold);
+        }
+
+        .system-label {
+            font-size: 14px;
+            letter-spacing: 6px;
+            color: var(--gold-dim);
+            font-weight: 800;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 70px; /* Increased size */
+            letter-spacing: 8px;
+            margin-bottom: 40px;
+            background: linear-gradient(to bottom, #fff, var(--gold-dim));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .input-group {
+            margin-bottom: 25px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            font-size: 12px;
+            letter-spacing: 3px;
+            color: #666;
+            margin-bottom: 10px;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        input {
+            width: 100%;
+            background: #111;
+            border: 2px solid #222;
+            padding: 20px;
+            color: var(--gold);
+            font-weight: 800;
+            font-size: 18px; /* Increased font size */
+            letter-spacing: 3px;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        input:focus {
+            border-color: var(--gold);
+            background: #151515;
+            box-shadow: 0 0 15px rgba(197, 160, 89, 0.1);
+        }
+
+        .enter-btn {
+            display: block;
+            width: 100%;
+            background: transparent;
+            border: 2px solid var(--gold);
+            color: var(--gold);
+            padding: 22px;
+            margin-top: 20px;
+            font-family: 'Bebas Neue';
+            font-size: 26px; /* Increased size */
+            letter-spacing: 5px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: 0.4s;
+            text-transform: uppercase;
+        }
+
+        .enter-btn:hover {
+            background: var(--gold);
+            color: #000;
+            box-shadow: 0 0 20px rgba(197, 160, 89, 0.4);
+        }
+
+        .error-msg {
+            color: var(--error);
+            font-size: 12px;
+            letter-spacing: 2px;
+            font-weight: 800;
+            margin-top: 20px;
+            display: none;
+            text-transform: uppercase;
+        }
+
+        /* --- SHAKE ANIMATION --- */
+        .shake { animation: shake 0.4s ease-in-out; }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-10px); }
+            40%, 80% { transform: translateX(10px); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-box" id="loginBox">
+        <p class="system-label">Central Terminal v2.0</p>
+        <h1>IDENTITY CHECK</h1>
+        
+        <div class="input-group">
+            <label>Personnel ID</label>
+            <input type="text" id="userID" autocomplete="off" placeholder="XXXX-XXXX">
+        </div>
+
+        <div class="input-group">
+            <label>Security Key</label>
+            <input type="password" id="passkey" placeholder="••••••">
+        </div>
+
+        <button class="enter-btn" onclick="checkAccess()">Enter Vault</button>
+        
+        <p class="error-msg" id="error">Incompatible Credentials // Access Denied</p>
+    </div>
+
+    <script>
+        function checkAccess() {
+            const id = document.getElementById('userID').value;
+            const key = document.getElementById('passkey').value;
+            const error = document.getElementById('error');
+            const box = document.getElementById('loginBox');
+
+            // Verification Logic
+            if (id === 'JC' && key === '321') {
+                window.location.href = 'index.html';
+            } else {
+                error.style.display = 'block';
+                box.classList.add('shake');
+                
+                // Reset shake
+                setTimeout(() => {
+                    box.classList.remove('shake');
+                }, 400);
+            }
+        }
+
+        // Press Enter to submit
+        window.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') checkAccess();
+        });
+    </script>
+
+</body>
+</html>
